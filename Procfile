@@ -1,1 +1,1 @@
-web: gunicorn import:server --timeout 120
+web: gunicorn import:server --timeout 60
