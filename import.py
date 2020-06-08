@@ -48,11 +48,6 @@ Types = ['day 1','day 2','day 2','day 4','day 5','day 6','IV']
 trace1 = []    
 
 
-
-# Create the app
-app = dash.Dash()
-server = app.server
-
     
 # order should be the same as "id" passed to location
 for q in Types:
@@ -182,6 +177,8 @@ fig=go.Figure(data=trace2 + trace1, layout=layout)
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+
+server = app.server
 
 app.layout = html.Div(children=[
     html.H1(children=''),
