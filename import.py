@@ -47,7 +47,6 @@ Types = ['day 1','day 2','day 2','day 4','day 5','day 6','IV']
 
 trace1 = []    
 
-
     
 # order should be the same as "id" passed to location
 for q in Types:
@@ -99,12 +98,14 @@ layout = go.Layout(
     		 'font': {'size':28, 
     		 		  'family':'Arial'}},
     autosize = True,
+    width=1300,
+    height =650,
     
     mapbox1 = dict(
         domain = {'x': [0.3, 1],'y': [0, 1]},
         center = dict(lat=latitude, lon=longitude), 
         accesstoken = mapbox_accesstoken, 
-        zoom = 9 
+        zoom = 10 
         ),
 
     xaxis2={
@@ -121,13 +122,13 @@ layout = go.Layout(
         'anchor': 'y2',
         'autorange': 'reversed',
     },
-    margin=dict(l=100, r=20, t=100, b=70),
-    paper_bgcolor='rgb(240, 255, 240)',
-    plot_bgcolor='rgb(226, 83, 3)')
+    margin=dict(l=20, r=20, t=50, b=50),
+    paper_bgcolor='rgb(235, 235, 232)',
+    plot_bgcolor='rgb(32, 44, 82)')
 
 layout.update(updatemenus=list([
-    dict(x=0,
-         y=1,
+    dict(x=1,
+         y=1.1,
          xanchor='left',
          yanchor='middle',
          buttons=list([
@@ -189,7 +190,7 @@ app.layout = html.Div(children=[
     ),
 
     html.Div(children='''
-        IN+/IST @June 2020
+        IN+/IST | June 2020
     ''')
 ])
 
