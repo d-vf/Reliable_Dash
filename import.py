@@ -13,10 +13,25 @@ import plotly.graph_objs as go
 from urllib.request import urlopen
 
 # get relative data folder
+import os
+import pathlib
+
+import json
+import dash
+import dash_core_components as dcc
+import dash_html_components as html
+import flask
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objs as go
+
+from urllib.request import urlopen
+
+# get relative data folder
 PATH = pathlib.Path(__file__).parent
 DATA_PATH = PATH.joinpath("data").resolve()
 
-map_df = pd.read_csv(DATA_PATH.joinpath("map_df2.csv"),sep=',',error_bad_lines=False)
+map_df = pd.read_csv(DATA_PATH.joinpath("map_df0708.csv"),sep=',',error_bad_lines=False)
 
 # mapbox token
 mapbox_accesstoken = 'pk.eyJ1IjoiZC12ZiIsImEiOiJjazZuNTM4NnkwcjE0M3RsaTFtYTFoeWJnIn0.LWr2mmAYaNCG2CBk_PcD9Q'
@@ -43,7 +58,9 @@ pl_deep=[[0.0, 'rgb(253, 253, 204)'],
          [0.9, 'rgb(55, 44, 80)'],
          [1.0, 'rgb(39, 26, 44)']]
 
-Types = ['day 1','day 2','day 2','day 4','day 5','day 6','IV']    
+Types = ['day 1','day 2','day 3','day 4','day 5','day 6','day 7'] 
+
+TypesI = ['Discomfort day 1','Discomfort day 2','Discomfort day 3','Discomfort day 4','Discomfort day 5','Discomfort day 6', 'Discomfort day 7'] 
 
 trace1 = []    
 
@@ -57,6 +74,7 @@ for q in Types:
         colorscale = ["blue", "orange", "red"],
         text = BGRI11, 
         colorbar = dict(thickness=20, ticklen=3),
+        zmin=20, zmax=30,
         marker_line_width=0, marker_opacity=0.7,
         visible=False,
         subplot='mapbox1',
@@ -69,20 +87,21 @@ trace1[0]['visible'] = True
 trace2 = []    
     
 # Suburbs order should be the same as "id" passed to location
-for q in Types:
+for q in TypesI:
     trace2.append(go.Bar(
         x=map_df.sort_values([q], ascending=False).head(10)[q],
         y=map_df.sort_values([q], ascending=False).head(10)['LUG11DESIG'].str.title().tolist(),
         xaxis='x2',
         yaxis='y2',
+        showlegend=False,
         marker=dict(
             color='rgba(255, 250, 250)',
             line=dict(
                 color='rgba(91, 207, 135, 2.0)',
-                width=0.5),
+                width=0.5)
         ),
         visible=False,
-        name='Top 10 places with the highest {} max indoor temperature'.format(q),
+        name='Nº {} Discomfort hours'.format(q),
         orientation='h',
     ))
     
@@ -131,40 +150,43 @@ layout.update(updatemenus=list([
          y=1.1,
          xanchor='left',
          yanchor='middle',
+         direction="down",
+         pad={"r": 10, "t": 10},
+        showactive=True,
          buttons=list([
              dict(
                  args=['visible', [True, False, False, False, False, False, False]],
-                 label='day 1',
+                 label='2020-07-08',
                  method='restyle'
                  ),
              dict(
                  args=['visible', [False, True, False, False,False, False, False]],
-                 label='day 2',
+                 label='2020-07-09',
                  method='restyle'
                  ),
              dict(
                  args=['visible', [False, False, True, False,False, False, False]],
-                 label='day 3',
+                 label='2020-07-10',
                  method='restyle'
                  ),
              dict(
                  args=['visible', [False, False, False, True,False, False, False]],
-                 label='day 4',
+                 label='2020-07-11',
                  method='restyle'
                 ),
              dict(
                  args=['visible', [False, False, False, False,True, False, False]],
-                 label='day 5',
+                 label='2020-07-12',
                  method='restyle'
                 ),
              dict(
                  args=['visible', [False, False, False, False, False, True,False]],
-                 label='day 6',
+                 label='2020-07-13',
                  method='restyle'
                  ),
             dict(
                  args=['visible', [False, False, False, False, False, False, True]],
-                 label='IV',
+                 label='2020-07-14',
                  method='restyle'
                  )
             ]),
@@ -190,7 +212,7 @@ app.layout = html.Div(children=[
     ),
 
     html.Div(children='''
-        IN+/IST | June 2020
+        IN+/IST | July 2020
     ''')
 ])
 
